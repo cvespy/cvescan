@@ -1,0 +1,49 @@
+name: 'CVEScan'
+description: 'Scan your lockfile for CVEs on every push. Builds a timestamped audit trail for SOC 2 / ISO 27001 compliance.'
+author: 'CVEScan'
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  api-key:
+    description: 'CVEScan API key (from cvescan.io/dashboard)'
+    required: true
+  api-url:
+    description: 'CVEScan API URL (default: https://api.cvespy.com)'
+    required: false
+    default: 'https://api.cvespy.com'
+  github-token:
+    description: 'GitHub token for PR comments (defaults to GITHUB_TOKEN)'
+    required: false
+    default: ${{ github.token }}
+  min-severity:
+    description: 'Minimum severity to report (critical, high, medium, low)'
+    required: false
+    default: 'high'
+  fail-on-critical:
+    description: 'Fail the workflow if critical CVEs are found'
+    required: false
+    default: 'true'
+  comment-on-pr:
+    description: 'Comment vulnerability summary on PRs'
+    required: false
+    default: 'true'
+  include-dev-deps:
+    description: 'Include dev dependencies in scan'
+    required: false
+    default: 'false'
+
+outputs:
+  cve-count:
+    description: 'Total number of CVEs found'
+  critical-count:
+    description: 'Number of critical CVEs'
+  high-count:
+    description: 'Number of high CVEs'
+  report:
+    description: 'Full vulnerability report (JSON)'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
