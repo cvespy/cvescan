@@ -1,16 +1,16 @@
-name: 'CVEScan'
-description: 'Scan your lockfile for CVEs on every push. Builds a timestamped audit trail for SOC 2 / ISO 27001 compliance.'
-author: 'CVEScan'
+name: 'CVESpy'
+description: 'Block malicious packages and catch CVEs on every push. Keeps a live package inventory across repos for "are we affected?" search.'
+author: 'CVESpy'
 branding:
   icon: 'shield'
   color: 'blue'
 
 inputs:
   api-key:
-    description: 'CVEScan API key (from cvescan.io/dashboard)'
+    description: 'CVESpy API key (from cvespy.com/dashboard)'
     required: true
   api-url:
-    description: 'CVEScan API URL (default: https://api.cvespy.com)'
+    description: 'CVESpy API URL (default: https://api.cvespy.com)'
     required: false
     default: 'https://api.cvespy.com'
   github-token:
@@ -23,6 +23,10 @@ inputs:
     default: 'high'
   fail-on-critical:
     description: 'Fail the workflow if critical CVEs are found'
+    required: false
+    default: 'true'
+  fail-on-malware:
+    description: 'Fail the workflow when a known-malicious package (OSV MAL- advisory) is found, regardless of min-severity or fail-on-critical'
     required: false
     default: 'true'
   comment-on-pr:
@@ -41,6 +45,8 @@ outputs:
     description: 'Number of critical CVEs'
   high-count:
     description: 'Number of high CVEs'
+  malware-count:
+    description: 'Number of known-malicious packages found'
   report:
     description: 'Full vulnerability report (JSON)'
 
